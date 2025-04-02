@@ -1,8 +1,9 @@
 section .data
-    msg db "Result: ", 0  ; Message for output
+    msg db "Result: ", 0
+    newline db 10
 
 section .bss
-    result resb 1          ; Space for storing result
+    result resb 2
 
 section .text
     global _start
@@ -18,7 +19,8 @@ _start:
     and al, 7
     xor al, 2
 
-    ; Store result
+    ; Convert to ASCII
+    add al, '0'
     mov [result], al
 
     ; Print message
@@ -35,7 +37,14 @@ _start:
     mov rdx, 1
     syscall
 
-    ; Exit program
+    ; Print newline
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, newline
+    mov rdx, 1
+    syscall
+
+    ; Exit
     mov rax, 60
     xor rdi, rdi
     syscall
